@@ -1,0 +1,36 @@
+# install-argocd.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
+---
+# Deploy ArgoCD Core components
+# (Directly using the official install.yaml from ArgoCD project)
+# You can either paste full YAML here, or just apply below
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: argocd-server
+  namespace: argocd
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-server
+  namespace: argocd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: argocd-server
+    spec:
+      containers:
+        - name: argocd-server
+          image: quay.io/argoproj/argocd:v2.10.5
+          ports:
+            - containerPort: 8080
